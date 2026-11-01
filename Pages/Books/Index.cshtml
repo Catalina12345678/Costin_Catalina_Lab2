@@ -1,8 +1,9 @@
-@page
+
+@page "/"
 @model Costin_Catalina_Lab2.Pages.BookPages.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Books";
 }
 
 <h1>Index</h1>
@@ -11,30 +12,67 @@
     <a asp-page="Create">Create New</a>
 </p>
 
+<form method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by Book Title / Author Name:
+            <input type="text"
+                   name="searchString"
+                   value="@Model.CurrentFilter" />
+
+            <input type="submit"
+                   value="Search"
+                   class="btn btn-primary" />
+
+            <a asp-page="./Index">Back to full List</a>
+        </p>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
-            <th>Book Title</th>
-            <th>Author</th>
+            <th>
+                <a asp-page="./Index"
+                   asp-route-sortOrder="@Model.TitleSort"
+                   asp-route-searchString="@Model.CurrentFilter">
+                    Book Title
+                </a>
+            </th>
+
+            <th>
+                <a asp-page="./Index"
+                   asp-route-sortOrder="@Model.AuthorSort"
+                   asp-route-searchString="@Model.CurrentFilter">
+                    Author
+                </a>
+            </th>
+
             <th>Price</th>
             <th>PublishingDate</th>
             <th>PublisherName</th>
+            <th>BookCategories</th>
             <th></th>
         </tr>
     </thead>
 
     <tbody>
-        @foreach (var item in Model.Book)
+        @foreach (var item in Model.BookD.Books)
         {
-            <tr>
+            string selectedRow = "";
+
+            if (item.ID == Model.BookID)
+            {
+                selectedRow = "table-success";
+            }
+
+            <tr class="@selectedRow">
                 <td>
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
 
                 <td>
-                    @(item.Author != null
-                        ? item.Author.FirstName + " " + item.Author.LastName
-                        : "")
+                    @(item.Author?.FullName ?? "")
                 </td>
 
                 <td>
@@ -50,9 +88,28 @@
                 </td>
 
                 <td>
-                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                    @if (item.BookCategories != null)
+                    {
+                        @foreach (var category in item.BookCategories
+                            .OrderBy(bc => bc.CategoryID))
+                        {
+                            <div>
+                                @category.CategoryID
+                                @(category.Category?.CategoryName ?? "")
+                            </div>
+                        }
+                    }
+                </td>
+
+                <td>
+                    <a asp-page="./Edit"
+                       asp-route-id="@item.ID">Edit</a> |
+
+                    <a asp-page="./Details"
+                       asp-route-id="@item.ID">Details</a> |
+
+                    <a asp-page="./Delete"
+                       asp-route-id="@item.ID">Delete</a>
                 </td>
             </tr>
         }

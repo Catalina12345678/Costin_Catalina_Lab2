@@ -1,7 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Costin_Catalina_Lab2.Models;
+using Costin_Catalina_Lab2.ViewModels;
 
 namespace Costin_Catalina_Lab2.Pages.PublisherPages;
 
@@ -14,10 +15,45 @@ public class IndexModel : PageModel
         _context = context;
     }
 
-    public IList<Publisher> Publisher { get; set; } = default!;
+    public IList<Publisher> Publisher { get; set; }
+        = new List<Publisher>();
 
-    public async Task OnGetAsync()
+    public PublisherIndexData PublisherData { get; set; }
+        = new PublisherIndexData();
+
+    public int PublisherID { get; set; }
+
+    public int BookID { get; set; }
+
+    public async Task OnGetAsync(int? id, int? bookID)
     {
-        Publisher = await _context.Publisher.ToListAsync();
+        PublisherData = new PublisherIndexData();
+
+        PublisherData.Publishers = await _context.Publisher
+            .Include(p => p.Books)
+                .ThenInclude(b => b.Author)
+            .OrderBy(p => p.PublisherName)
+            .ToListAsync();
+
+        Publisher = PublisherData.Publishers.ToList();
+
+        if (id != null)
+        {
+            PublisherID = id.Value;
+
+            var publisher = PublisherData.Publishers
+                .SingleOrDefault(p => p.ID == id.Value);
+
+            if (publisher != null)
+            {
+                PublisherData.Books = publisher.Books
+                    ?? new List<Book>();
+            }
+        }
+
+        if (bookID != null)
+        {
+            BookID = bookID.Value;
+        }
     }
 }

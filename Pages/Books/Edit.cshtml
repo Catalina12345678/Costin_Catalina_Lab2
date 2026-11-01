@@ -1,3 +1,4 @@
+
 @page
 @model Costin_Catalina_Lab2.Pages.BookPages.EditModel
 
@@ -10,53 +11,129 @@
 <hr />
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger"></div>
 
             <input type="hidden" asp-for="Book.ID" />
 
-            <div class="form-group">
-                <label asp-for="Book.Title" class="control-label"></label>
-                <input asp-for="Book.Title" class="form-control" />
-                <span asp-validation-for="Book.Title" class="text-danger"></span>
+            <div class="form-group mb-3">
+                <label asp-for="Book.Title"
+                       class="control-label"></label>
+
+                <input asp-for="Book.Title"
+                       class="form-control" />
+
+                <span asp-validation-for="Book.Title"
+                      class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Book.AuthorID" class="control-label">Author</label>
+            <div class="form-group mb-3">
+                <label asp-for="Book.AuthorID"
+                       class="control-label">Author</label>
+
                 <select asp-for="Book.AuthorID"
                         class="form-control"
                         asp-items="ViewBag.AuthorID">
                     <option value="">Selectează autorul</option>
                 </select>
-                <span asp-validation-for="Book.AuthorID" class="text-danger"></span>
+
+                <span asp-validation-for="Book.AuthorID"
+                      class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Book.Price" class="control-label"></label>
-                <input asp-for="Book.Price" class="form-control" />
-                <span asp-validation-for="Book.Price" class="text-danger"></span>
+            <div class="form-group mb-3">
+                <label asp-for="Book.Price"
+                       class="control-label"></label>
+
+                <input asp-for="Book.Price"
+                       class="form-control" />
+
+                <span asp-validation-for="Book.Price"
+                      class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Book.PublishingDate" class="control-label"></label>
-                <input asp-for="Book.PublishingDate" class="form-control" />
-                <span asp-validation-for="Book.PublishingDate" class="text-danger"></span>
+            <div class="form-group mb-3">
+                <label asp-for="Book.PublishingDate"
+                       class="control-label"></label>
+
+                <input asp-for="Book.PublishingDate"
+                       class="form-control" />
+
+                <span asp-validation-for="Book.PublishingDate"
+                      class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Book.PublisherID" class="control-label">Publisher Name</label>
+            <div class="form-group mb-3">
+                <label asp-for="Book.PublisherID"
+                       class="control-label">
+                    Publisher Name
+                </label>
+
                 <select asp-for="Book.PublisherID"
                         class="form-control"
                         asp-items="ViewBag.PublisherID">
                     <option value="">Selectează editura</option>
                 </select>
-                <span asp-validation-for="Book.PublisherID" class="text-danger"></span>
+
+                <span asp-validation-for="Book.PublisherID"
+                      class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group mb-3">
+                <label class="control-label">Categories</label>
+
+                <div class="table-responsive">
+                    <table class="table table-borderless">
+                        <tbody>
+                            @{
+                                int cnt = 0;
+                            }
+
+                            @foreach (var cat in Model.AssignedCategoryDataList)
+                            {
+                                if (cnt % 3 == 0)
+                                {
+                                    @:<tr>
+                                }
+
+                                <td>
+                                    <label class="form-check-label">
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               name="selectedCategories"
+                                               value="@cat.CategoryID"
+                                               checked="@cat.Assigned" />
+
+                                        @cat.CategoryID - @cat.Name
+                                    </label>
+                                </td>
+
+                                cnt++;
+
+                                if (cnt % 3 == 0)
+                                {
+                                    @:</tr>
+                                }
+                            }
+
+                            @if (cnt % 3 != 0)
+                            {
+                                @:</tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
+            <div class="form-group mt-3">
+                <input type="submit"
+                       value="Save"
+                       class="btn btn-primary" />
+            </div>
+
         </form>
     </div>
 </div>
