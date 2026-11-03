@@ -24,6 +24,8 @@ namespace Costin_Catalina_Lab2.Models
         public int? PublisherID { get; set; }
         public Publisher? Publisher { get; set; }
 
+        public ICollection<Borrowing>? Borrowings { get; set; }
+
         public ICollection<BookCategory>? BookCategories { get; set; }
     }
 }

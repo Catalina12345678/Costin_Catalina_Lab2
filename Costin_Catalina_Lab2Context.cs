@@ -10,6 +10,8 @@ namespace Costin_Catalina_Lab2.Models
 {
     public class Costin_Catalina_Lab2Context : DbContext
     {
+        public DbSet<Costin_Catalina_Lab2.Models.Borrowing> Borrowing { get; set; } = default!;
+        public DbSet<Costin_Catalina_Lab2.Models.Member> Member { get; set; } = default!;
         public DbSet<Costin_Catalina_Lab2.Models.Category> Category { get; set; } = default!;
         public Costin_Catalina_Lab2Context(
             DbContextOptions<Costin_Catalina_Lab2Context> options)
